@@ -1,0 +1,58 @@
+Para normalizar a primeira vez o treinamento
+
+svm-scale -l -1 -u 1 -s ranges.txt trn.libsvm > trn.scale.libsvm
+
+Para normalizar o teste usa-se:
+
+svm-scale -l -1 -u 1 -r ranges.txt tst.libsvm > tst.libsvm.scale
+
+Para treinar na linha de comando
+
+svm-train -b 1 trn.libsvm.scale
+// svm-train -b -c -g  1 trn.libsvm.scale
+
+o resultado é um arquivo trn.libsvm.scale.model
+
+svm-predict -b 1 tst.libsvm.scale trn.libsvm.scale.model predicoes.txt
+
+
+
+USAR O grid.py
+
+python grid.py ~/Documentos/weka-3-6-9/trn.scale.libsvm 
+
+
+
+//////////////////////////////////////////////////////////////////
+
+melhor parametro para o libsvm Classes 0 e 1
+
+32.0 0.00048828125
+
+//////////////////////////////////////////////////////////////////
+
+ cat trn.libsvm | grep "1 1:" | head -16 > trn.libsvm.class1
+ //cat (ler o arquivo e exibe no terminal)
+ // grep (procura o padrão no arquivo exibido que tenha o padrão informado através de aspas duplas)
+ // > (envia para um arquivo de saida)
+ // head -quantidade (head pega as primeiras nQuantidade de linhas do arquivo )
+// tail -quantidade (tail pega as ultimas nQuantidade de linhas do arquivo )
+
+////////////////////////////////////////////////////////////////////////
+
+sort -R trn.libsvm > trn.libsvm.rand
+// sort (ordena)
+// -R (randomAleatorio)
+
+///////////////////////////////////////////////////////////////////////////
+
+ cat trn.libsvm.class0 > trn.libsvm.classes0e1
+ 
+ // cat (ler o arquivo e exibe no terminal)
+ // > (envia o arquivo para uma saida)
+ 
+ ////////////////////////////////////////////////////////////////////////
+
+ cat trn.libsvm.class1 >> trn.libsvm.classes0e1
+
+// >> (salva o arquivo em append (salva a partir da ultima linha existente no arquivo) )

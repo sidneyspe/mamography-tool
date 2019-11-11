@@ -1,0 +1,144 @@
+// cat arquivoGeralPxRy.scale.libsvm | grep "1 1:" | wc -l 
+// mostra quantas linhas tem o padrão "1 1:"
+
+Passos:
+	Gerar o arquivo arquivoGeralPxRy.libsvm (onde x = numero de P, y = numero de R)
+	
+	Normalizar o arquivo arquivoGeralPxRy.libsvm --> arquivoGeralPxRy.scale.libsvm
+		svm-scale -l -1 -u 1 -s ranges.txt arquivoGeralPxRy.libsvm > arquivoGeralPxRy.scale.libsvm
+		
+	Gerar um arquivo aleatorio a partir dos dados de  arquivoGeralPxRy.scale.libsvm --> arquivoGeralPxRy.scale.libsvm.random
+		sort -R  arquivoGeralPxRy.scale.libsvm >  arquivoGeralPxRy.scale.libsvm.random
+		
+	Pegar uma amostra de classe 0 e classe 1 do arquivo arquivoGeralPxRy.scale.libsvm.random e salvar em um arquivo de treino e de teste.
+		 cat arquivoGeralPxRy.scale.libsvm.random | grep "1 1:" | head -quantidadeTreino > trnArquivoGeralPxRy.scale.libsvm.random.class1
+		 cat arquivoGeralPxRy.scale.libsvm.random | grep "1 1:" | tail -quantidadeTeste >> trnArquivoGeralPxRy.scale.libsvm.random.class0
+		 
+		 cat trnArquivoGeralPxRy.scale.libsvm.random.class0 > trnFinal.libsvm
+		 cat trnArquivoGeralPxRy.scale.libsvm.random.class1 >> trnFinal.libsvm
+		  
+	Treinar com os valores de c e g o arquivo de treino
+		svm-train -b 1 -c valorDeC -g valorDeG trnFinal.libsvm
+		
+	Fazer a predição
+		svm-predict -b 1 tstFinal.libsvm trnFinal.libsvm.model predicoesPxRy.txt
+		
+	Usar o codigo de comparação e salva os valores no arquivo do relatorioDosExperimentos.txt
+	
+-------------------------------------------------------------------------------------------
+
+Grid.py
+	// c = 32.0 g = 0.00048828125
+	2.0 0.0078125 87.931
+
+Imagens para treino: 
+	100 que não possuem cancer
+	16 que possuem cancer
+Imagens para teste:
+	100 que não possuem cancer (diferentes dos 100 que foi usados para o treino)
+	8 que possuem cancer
+
+Classes usadas : 2 (cancer =1 e não-cancer = 0)
+	
+---------------------------------------------------------------------------------------------
+
+P 4 R 1
+
+Grid.py
+c = 32768.0 g = 0.001953125 90.5172
+
+True Positive: 0
+False Negative: 8
+True Negative: 98
+False Positive: 2
+
+True Positive: 0% 
+False Negative: 100% 
+True Negative: 98% 
+False Positive: 2% 
+
+Sensitivity = 0
+Accuracy = 0.907407
+Specificity = 0.98
+positive_predictive_value = 0
+negative_predictive_value = 0.924528
+
+------------------------------------------------------------------------------------------------
+
+P 4 R 2
+
+Grid.py
+c = 0.03125 g = 0.0078125 86.2069
+
+True Positive: 3
+False Negative: 5
+True Negative: 94
+False Positive: 6
+
+True Positive: 37.5% 
+False Negative: 62.5% 
+True Negative: 94% 
+False Positive: 6% 
+
+Sensitivity = 0.375
+Accuracy = 0.898148
+Specificity = 0.94
+positive_predictive_value = 0.333333
+negative_predictive_value = 0.949495
+
+--------------------------------------------------------------------------------------------------
+
+P 8 R 1
+
+Grid.py
+c = 32.0  g = 0.0078125 87.931
+
+
+True Positive: 2
+False Negative: 6
+True Negative: 95
+False Positive: 5
+
+True Positive: 25% 
+False Negative: 75% 
+True Negative: 95% 
+False Positive: 5% 
+
+Sensitivity = 0.25
+Accuracy = 0.898148
+Specificity = 0.95
+positive_predictive_value = 0.285714
+negative_predictive_value = 0.940594
+
+----------------------------------------------------------------------------------------------------
+
+P`8 R 2
+
+Grid.py
+c = 2048.0 g = 0.0001220703125 87.069
+
+True Positive: 4
+False Negative: 4
+True Negative: 93
+False Positive: 7
+
+True Positive: 50% 
+False Negative: 50% 
+True Negative: 93% 
+False Positive: 7% 
+
+Sensitivity = 0.5
+Accuracy = 0.898148
+Specificity = 0.93
+positive_predictive_value = 0.363636
+negative_predictive_value = 0.958763
+
+----------------------------------------------------------------------------------------------------
+
+P 16 R 2
+
+????
+
+As caracteristicas extraidas (histograma) para P = 16 é um numero muito elevado 2^16 = 65536, ou seja, para cada uma das 82149 imagens vai possuir 65536, feito isso o arquivo de texto possui aproximadamente 43 Gb (valor muito exagerado) impossibilitando assim o escalonamento, tornando o processo muito lento.
+
+----------------------------------------------------------------------------------------------------
